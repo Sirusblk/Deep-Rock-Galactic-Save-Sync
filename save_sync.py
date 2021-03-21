@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import configparser
+import datetime
 import os.path
 import re
 
@@ -88,6 +89,29 @@ def find_save_name(save_subfolder, save_file_candidates):
     return latest_save_file
 
 
+def update_timestamps():
+    CONFIG['General']['SteamSaveDate'] = get_modify_datetime(
+        os.path.join(
+            CONFIG['General']['SteamPath'],
+            CONFIG['General']['SteamSaveName']
+        )
+    )
+    CONFIG['General']['WinStoreSaveDate'] = get_modify_datetime(
+        os.path.join(
+            CONFIG['General']['WinStorePath'],
+            CONFIG['General']['WinStoreSaveName']
+        )
+    )
+
+
+def get_modify_datetime(filepath):
+    if os.path.isfile(filepath):
+        return datetime.datetime.fromtimestamp(os.stat(filepath).st_mtime).isoformat()
+
+    print('Error: Cannot find modify time')
+    return ''
+
+
 def save_config():
     with open('config.ini', 'w') as configfile:
         CONFIG.write(configfile)
@@ -95,6 +119,7 @@ def save_config():
 
 def main():
     init_config()
+    update_timestamps()
     save_config()
 
 
