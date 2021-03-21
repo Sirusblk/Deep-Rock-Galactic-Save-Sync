@@ -4,6 +4,7 @@ import configparser
 import datetime
 import os.path
 import re
+import shutil
 
 from string import ascii_uppercase
 
@@ -117,10 +118,36 @@ def save_config():
         CONFIG.write(configfile)
 
 
+def backup_saves():
+    backup_folder_name = 'backups'
+    steam_folder_name = 'Steam'
+    winstore_folder_name = 'WinStore'
+    steam_path = os.path.join(backup_folder_name, steam_folder_name)
+    winstore_path = os.path.join(backup_folder_name, winstore_folder_name)
+
+    if not os.path.exists(backup_folder_name):
+        os.makedirs(backup_folder_name)
+        if not os.path.exists(steam_path):
+            os.makedirs(steam_path)
+        if not os.path.exists(winstore_path):
+            os.makedirs(winstore_path)
+
+    steam_file_path = os.path.join(steam_path, CONFIG['General']['SteamSaveName'])
+    winstore_file_path = os.path.join(winstore_path, CONFIG['General']['WinStoreSaveName'])
+
+    shutil.copy(
+        os.path.join(CONFIG['General']['SteamPath'], CONFIG['General']['SteamSaveName']),
+        steam_file_path)
+    shutil.copy(
+        os.path.join(CONFIG['General']['WinStorePath'], CONFIG['General']['WinStoreSaveName']),
+        winstore_file_path)
+
+
 def main():
     init_config()
     update_timestamps()
     save_config()
+    backup_saves()
 
 
 if __name__ == '__main__':
