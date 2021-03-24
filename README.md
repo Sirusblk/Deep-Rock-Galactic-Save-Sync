@@ -3,6 +3,6 @@ This application aims to help sync save files between Steam and the Windows Stor
 
 ### Status
 - [X] Save paths and file names to `config.ini` file
-- [ ] Backup save files
+- [X] Backup save files
 - [ ] Swap files/Rename
 - [ ] Add GUI Interface

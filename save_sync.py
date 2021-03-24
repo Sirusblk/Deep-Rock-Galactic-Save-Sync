@@ -122,25 +122,33 @@ def backup_saves():
     backup_folder_name = 'backups'
     steam_folder_name = 'Steam'
     winstore_folder_name = 'WinStore'
-    steam_path = os.path.join(backup_folder_name, steam_folder_name)
-    winstore_path = os.path.join(backup_folder_name, winstore_folder_name)
+    steam_backup_path = os.path.join(backup_folder_name, steam_folder_name)
+    winstore_backup_path = os.path.join(backup_folder_name, winstore_folder_name)
 
     if not os.path.exists(backup_folder_name):
         os.makedirs(backup_folder_name)
-        if not os.path.exists(steam_path):
-            os.makedirs(steam_path)
-        if not os.path.exists(winstore_path):
-            os.makedirs(winstore_path)
+        if not os.path.exists(steam_backup_path):
+            os.makedirs(steam_backup_path)
+        if not os.path.exists(winstore_backup_path):
+            os.makedirs(winstore_backup_path)
 
-    steam_file_path = os.path.join(steam_path, CONFIG['General']['SteamSaveName'])
-    winstore_file_path = os.path.join(winstore_path, CONFIG['General']['WinStoreSaveName'])
+    steam_save_backup_path = os.path.join(steam_backup_path, CONFIG['General']['SteamSaveName'])
+    winstore_save_backup_path = os.path.join(winstore_backup_path, CONFIG['General']['WinStoreSaveName'])
 
     shutil.copy(
         os.path.join(CONFIG['General']['SteamPath'], CONFIG['General']['SteamSaveName']),
-        steam_file_path)
+        steam_save_backup_path)
     shutil.copy(
         os.path.join(CONFIG['General']['WinStorePath'], CONFIG['General']['WinStoreSaveName']),
-        winstore_file_path)
+        winstore_save_backup_path)
+
+    # Change modification time on save file backups
+    if (CONFIG['General']['SteamSaveDate'] !=''):
+        steam_save_mtime = datetime.datetime.fromisoformat(CONFIG['General']['SteamSaveDate']).timestamp()
+        os.utime(steam_save_backup_path, times=(steam_save_mtime, steam_save_mtime))
+    if (CONFIG['General']['WinStoreSaveDate'] !=''):
+        winstore_save_mtime = datetime.datetime.fromisoformat(CONFIG['General']['WinStoreSaveDate']).timestamp()
+        os.utime(winstore_save_backup_path, times=(winstore_save_mtime, winstore_save_mtime))
 
 
 def main():
