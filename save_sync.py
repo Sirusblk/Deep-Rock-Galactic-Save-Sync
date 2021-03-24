@@ -121,15 +121,14 @@ def backup_saves():
     backup_folder_name = 'backups'
     steam_folder_name = 'Steam'
     winstore_folder_name = 'WinStore'
-    steam_backup_path = os.path.join(backup_folder_name, steam_folder_name)
-    winstore_backup_path = os.path.join(backup_folder_name, winstore_folder_name)
+    timestamp = datetime.datetime.today().strftime("%Y-%m-%dT%H.%M.%S")
+    steam_backup_path = os.path.join(backup_folder_name, timestamp, steam_folder_name)
+    winstore_backup_path = os.path.join(backup_folder_name, timestamp, winstore_folder_name)
 
-    if not os.path.exists(backup_folder_name):
-        os.makedirs(backup_folder_name)
-        if not os.path.exists(steam_backup_path):
-            os.makedirs(steam_backup_path)
-        if not os.path.exists(winstore_backup_path):
-            os.makedirs(winstore_backup_path)
+    if not os.path.exists(steam_backup_path):
+        os.makedirs(steam_backup_path)
+    if not os.path.exists(winstore_backup_path):
+        os.makedirs(winstore_backup_path)
 
     steam_save_backup_path = os.path.join(steam_backup_path, CONFIG['General']['SteamSaveName'])
     winstore_save_backup_path = os.path.join(winstore_backup_path, CONFIG['General']['WinStoreSaveName'])
