@@ -16,12 +16,11 @@ def init_config():
     CONFIG.read('config.ini')
     if 'SteamPath' not in CONFIG['General']:
         find_steam_path()
-    if 'SteamSaveName' not in CONFIG['General']:
-        find_steam_save_name()
     if 'WinStorePath' not in CONFIG['General']:
         find_winstore_path()
-    if 'WinStoreSaveName' not in CONFIG['General']:
-        find_winstore_save_name()
+
+    find_steam_save_name()
+    find_winstore_save_name()
 
 
 def find_steam_path():
@@ -84,7 +83,7 @@ def find_save_name(save_subfolder, save_file_candidates):
         modify_time = os.stat(os.path.join(save_subfolder, save_file)).st_mtime
 
         if modify_time > latest_modify_time:
-            modify_time = latest_modify_time
+            latest_modify_time = modify_time
             latest_save_file = save_file
 
     return latest_save_file
